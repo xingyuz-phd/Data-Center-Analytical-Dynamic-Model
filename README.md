@@ -1,177 +1,180 @@
-# Generic EMT Modeling of Data Center Load v0 (DC_EMTv0)
+# Dynamic Modeling of Data-Center Power Delivery for Power-System Resonance Analysis
 
-**Authors:** Xingyu Zhao, Yingyi Tang, and Junbo Zhao  
-**Affiliation:** Dartmouth College  
-**PSCAD version:** 5.0.2  
-**Last updated:** September 28, 2026  
-**Contact:** [xingyu.zhao.th@dartmouth.edu](mailto:xingyu.zhao.th@dartmouth.edu)
+This repository contains the supplementary MATLAB code for the manuscript:
 
-## Overview
+> Xingyu Zhao and Junbo Zhao, **"Dynamic Modeling of Data-Center Power Delivery for Power System Resonance Analysis,"** arXiv:2604.06624v1, 2026.  
+> Manuscript: <https://arxiv.org/html/2604.06624v1>
 
-This project provides a modular electromagnetic transient (EMT) simulation model of data center loads supplied by a centralized uninterruptible power supply (UPS). It is intended for power system studies of control interactions among power electronic modules and dynamic interactions between the data center and the grid.
+The code implements the numerical studies associated with the paper's component-informed data-center power-delivery model and its integration into positive-sequence power-system dynamic analysis. The repository is code-only: generated figures, generated CSV outputs, MATLAB autosave files, and raw workload traces were intentionally removed.
 
-The PSCAD library, `DC_EMT_lib.pslx`, includes power electronic converters, IT load profiles, control blocks, grid components, and a mechanical load model. Two example cases demonstrate how to assemble a complete data center model and compare converter models at different fidelity levels.
+## Paper context
 
-## Workspace
+The paper develops a dynamic model of the online, double-conversion data-center power-delivery chain and uses it for power-system oscillation studies. The modeled chain includes:
 
-| Workspace item | Description |
-| --- | --- |
-| `DC_EMT_ws` | Workspace containing the component library and example projects |
-| `DC_EMT_lib.pslx` | Modular data center EMT component library |
-| `DC_EMT_demo` | Complete data center example using average converter models |
-| `DC_EMT_compare` | Comparison of model responses at different fidelity levels |
+1. an active front-end (AFE) rectifier connected to the grid-side point of common coupling (PCC),
+2. a UPS DC-link capacitor,
+3. a voltage-source inverter (VSI),
+4. an aggregated PSU-array equivalent, and
+5. a downstream DC-DC/load equivalent representing server-side CPU/GPU demand.
 
-## PSCAD Version and Required Settings
+The model is formulated as a time-invariant positive-sequence representation so that it can be combined with phasor-domain grid models and reduced to a small-signal state-space model. The scripts in this repository support the main numerical workflows in the paper:
 
-The supplied project files use **PSCAD 5.0.2**, as shown by both the Product Version and File Version in the project settings.
+- equilibrium computation of the nonlinear data-center/grid model,
+- bandwidth-based PI-controller tuning,
+- comparison between full three-phase and reduced positive-sequence/QSS models,
+- eigenvalue and participation-factor analysis,
+- power oscillation amplification (POA) analysis from server-load disturbance to grid-visible active power, and
+- time-domain simulations driven by sinusoidal or GPU-workload load variations.
 
-> [!IMPORTANT]
-> **Do not enable “Use ideal branches for resistances under”.**
-> In **Project Settings → Runtime → Network Solution Accuracy**, leave this checkbox **unchecked** before running the model.
-> Apply this setting to both `DC_EMT_demo` and `DC_EMT_compare`, and to any new project using these library modules.
+## Repository layout
 
-## Component Library
+```text
+TPWRS_DataCenter_SupplementalCode/
+├── README.md
+├── .gitignore
+├── .gitattributes
+└── src/
+    ├── case9/
+    │   ├── case9.m
+    │   ├── datacenter_init_from_pf_qss.m
+    │   ├── datacenter_port_model.m
+    │   ├── default_datacenter_params.m
+    │   ├── gfl_init_from_pf_qss_newton.m
+    │   ├── gfl_port_model.m
+    │   ├── gfm_init_from_pf_qss_newton.m
+    │   ├── gfm_port_model.m
+    │   ├── sm_init_from_pf_fsolve.m
+    │   └── sm_port_model.m
+    └── sdcib/
+        ├── SDCIB.m
+        ├── SDCIB_simplified_eigs_step.m
+        ├── ModelValidation.m
+        └── gpu_load_response.m
+```
 
-![DC_EMTv0 component library](dc_emt_component_library.png)
+## Code-to-paper map
 
-*Figure 1. Power electronic modules and supporting components in `DC_EMT_lib.pslx`.*
+| Paper component | Main script(s) | Description |
+| --- | --- | --- |
+| Component-level data-center model | `src/sdcib/SDCIB.m`, `src/case9/datacenter_port_model.m` | Implements the reduced positive-sequence data-center power-delivery model with AFE, DC link, VSI, PSU, and downstream DC-DC/load states. |
+| Model validation in the SDCIB case | `src/sdcib/ModelValidation.m` | Compares the full cascaded three-phase representation with the reduced QSS/positive-sequence model under a load step. This corresponds to the validation study in the SDCIB section of the paper. |
+| SDCIB modal, participation, and POA analysis | `src/sdcib/SDCIB.m` | Computes the equilibrium, linearizes the model, evaluates eigenvalues and participation factors, computes POA curves, and performs parameter scans over controller bandwidth, load level, and grid strength. |
+| Simplified SDCIB load-step example | `src/sdcib/SDCIB_simplified_eigs_step.m` | Provides a compact eigenvalue/participation-factor workflow and a reduced load-step response example. |
+| Realistic GPU-load time-domain response in SDCIB | `src/sdcib/gpu_load_response.m` | Uses an external GPU-load trace to simulate workload-induced propagation from server load to PCC power and to compute FFT spectra. |
+| Modified 3-machine 9-bus grid-integration case | `src/case9/case9.m` | Builds the modified 9-bus system with a synchronous machine, a grid-forming inverter, a grid-following inverter, and the data-center load at Bus 8; then performs modal/POA analysis and GPU-load time-domain simulation. |
+| SM/GFM/GFL/data-center dynamic port models | `src/case9/*_port_model.m`, `src/case9/*_init_*.m` | Initialization and dynamic port-equation routines used by the 9-bus study. |
 
-### Power Electronic Modules
+## Main workflows
 
-| Module | Average model (AVM) | Switching model (SWM) | Reduced-order model (ROM) |
-| --- | :---: | :---: | :---: |
-| Rectifier | Yes | Yes | Yes |
-| Inverter | Yes | Yes | Yes |
-| Battery DC–DC converter | Yes | Yes | Yes |
-| Power factor correction (PFC) converter | Yes | Yes | Yes |
-| Buck converter | Yes | Yes | Yes |
-| Variable frequency drive (VFD) | Yes | Yes | — |
+### 1. Single-data-center infinite-bus case
 
-- **AVM:** Represents average converter behavior while retaining circuit and control dynamics.
-- **SWM:** Represents switching devices and PWM operation, including switching ripple.
-- **ROM:** Simplifies fast dynamics while retaining the outer controls and energy-storage dynamics represented by each module.
+The SDCIB scripts study the intrinsic oscillatory behavior of the data-center power-delivery chain when the data center is connected to an infinite bus through a Thevenin impedance. This workflow is useful for isolating data-center internal modes before coupling the model to a larger grid.
 
-Parameters retained in the ROM use the same values as in the corresponding SWM.
+Recommended run order:
 
-### Supporting Modules
+```matlab
+cd src/sdcib
+ModelValidation
+SDCIB_simplified_eigs_step
+SDCIB
+```
 
-- **IT load profiles:** Ramp, sinusoidal, and square-wave demand variations.
-- **Control blocks:** PI controller, UPS supervisory control, and voltage ride-through (VRT) control.
-- **Grid components:** Grid equivalent and voltage-dip profile.
-- **Mechanical load:** Shaft-load model for motor-driven cooling loads.
+`ModelValidation.m` compares the full three-phase model and the reduced QSS positive-sequence model. `SDCIB.m` then computes eigenvalues, participation factors, POA curves, controller/load/grid-strength sensitivity scans, and sinusoidal load-response examples.
 
-## Control Methods
+### 2. Realistic GPU-workload response
 
-The following table summarizes the control objectives and structures. AVM and SWM retain the explicit current loops where used; ROM replaces these fast dynamics with ideal current tracking or an algebraic current response while retaining the represented outer controls.
+Two scripts use a time-varying GPU-load trace:
 
-| Module | Control method |
-| --- | --- |
-| Rectifier | **Grid-following (GFL) control.** A PLL tracks the grid angle. An outer DC-voltage PI generates the d-axis current reference, while the q-axis reference is zero. Inner dq current loops regulate the AC current. |
-| UPS inverter | **Grid-forming (GFM) control at the UPS output.** Cascaded voltage and current loops establish the protected AC voltage using an internally generated angle. A slow phase-alignment loop aligns this angle with the upstream PLL to reduce phase mismatch during transfers involving the bypass. |
-| Battery DC–DC converter | **Mode-dependent control.** Optional DC-voltage droop provides support during online operation. In battery mode, a voltage PI takes over regulation of the UPS DC link. A recovery ramp smooths the return to online operation. |
-| PFC converter | **DC-voltage regulation and input-current shaping.** The voltage PI produces a conductance command. Multiplying it by the rectified input voltage generates the current reference, targeting near-unity power factor under sinusoidal supply conditions. |
-| Buck converter | **Cascaded voltage and current control.** The voltage PI generates an inductor-current reference, and the current PI produces the duty command. A time-varying load resistance represents workload changes downstream of the regulated DC supply. |
-| VFD | **Open-loop V/F control.** The drive sets the inverter frequency from the command and adjusts voltage magnitude according to a V/F profile. Rotor speed is not fed back for speed regulation, so the actual speed depends on motor slip and mechanical loading. |
-| UPS supervisory and VRT controls | **Operating-mode selection.** Grid-voltage conditions and the ride-through logic determine mode commands; the UPS supervisor coordinates the rectifier, inverter, and bypass breakers. |
+```matlab
+cd src/sdcib
+gpu_load_response
+```
 
-The VFD's V/F profile aims to maintain approximately constant motor flux in its constant-ratio operating region. For background, see Texas Instruments' [Scalar (V/f) Control of 3-Phase Induction Motors](https://www.ti.com/lit/an/sprabq8/sprabq8.pdf).
+```matlab
+cd src/case9
+case9
+```
 
-## Bandwidth-Based PI Tuning
+These scripts require an external file named `GPU_data.csv` in the current MATLAB working directory. The expected columns are:
 
-The PI-regulated loops use a second-order target to relate response speed and damping to controller gains. Instead of selecting gains independently, specify a tuning frequency $f_{\mathrm{bw}}$ in hertz and a damping ratio $\zeta$.
+```text
+t_seconds,P_gpu_W
+```
 
-For a first-order plant approximation and a parallel PI controller,
+The raw workload trace is not included in this code-only release. When using your own trace, keep the same column names or modify the corresponding `readtable` section in the scripts.
 
-$$
-G(s)=\frac{K}{as+b},\qquad C_{\mathrm{PI}}(s)=K_p+\frac{K_i}{s},
-$$
+### 3. Modified 3-machine 9-bus case
 
-where $a>0$ and $K>0$, negative unity feedback gives the characteristic polynomial
+The 9-bus workflow is implemented in:
 
-$$
-a s^2+(b+K K_p)s+K K_i.
-$$
+```matlab
+cd src/case9
+case9
+```
 
-Matching this to $a(s^2+2\zeta\omega_n s+\omega_n^2)$ gives
+This script:
 
-$$
-\omega_n=2\pi f_{\mathrm{bw}},\qquad
-K_p=\frac{2\zeta\omega_n a-b}{K},\qquad
-K_i=\frac{a\omega_n^2}{K}.
-$$
+1. solves the power flow of the modified 9-bus system,
+2. performs Kron reduction for the retained dynamic ports,
+3. initializes the synchronous-machine, GFM, GFL, and data-center port models,
+4. forms the reduced small-signal model,
+5. computes eigenvalues and modal participation/coupling information,
+6. computes POA transfer gains from data-center load variation to multiple grid-side ports, and
+7. runs a GPU-load-driven time-domain simulation when `GPU_data.csv` is available.
 
-A higher tuning frequency gives faster target dynamics; the damping ratio sets the damping of the target poles. The coefficients $a$, $b$, and $K$ must represent the particular loop, including its per-unit scaling and operating point.
+In the included setup, the data-center load is connected at Bus 8. The three dynamic generation units are represented by a synchronous-machine model, a grid-forming inverter model, and a grid-following inverter model.
 
-For example, a capacitor voltage loop with ideal inner current tracking has $a=C_{\mathrm{pu}}/\omega_b$, $b=0$, and $K=1$, when the controller commands capacitor-side current and load current is treated as a disturbance. With physical time in seconds and $\omega_b=2\pi f_{\mathrm{base}}$,
+## MATLAB requirements
 
-$$
-K_p=\frac{2\zeta\omega_n C_{\mathrm{pu}}}{\omega_b},\qquad
-K_i=\frac{\omega_n^2 C_{\mathrm{pu}}}{\omega_b}.
-$$
+Recommended environment:
 
-Tune inner current loops first, then choose slower outer voltage loops so that the fast-current-loop approximation is reasonable. Verify the resulting response with the connected converter chain, including filters, switching delays, and limits.
+- MATLAB R2022b or newer.
+- Optimization Toolbox, required for `fsolve` and `optimoptions`.
 
-**Interpretation of bandwidth:** The parameter labeled “bandwidth” sets the target natural frequency through $\omega_n=2\pi f_{\mathrm{bw}}$. It is not generally equal to the measured closed-loop −3 dB bandwidth: the PI zero and additional dynamics also affect the response. ROM uses the same tuning values as SWM for every retained controller; tuning inputs for removed loops are omitted.
+The scripts also use standard MATLAB functionality including `ode15s`, `readtable`, `writetable`, `eig`, `fft`, plotting routines, and script-local functions. No Simulink model or third-party package is included.
 
-## Example Cases
+This repository was prepared as a clean code release. The numerical cases were not re-run during packaging.
 
-### Case 1: Complete Data Center Model (`DC_EMT_demo`)
+## Generated files
 
-This case demonstrates how to use the modules in `DC_EMT_lib.pslx` to build a complete data center model for power system dynamic studies. It uses average converter models and includes disturbances on both the grid and workload sides.
+The following files may be generated when running the scripts and are ignored by Git:
 
-![Example data center load model](dc_emt_data_center_example.png)
+```text
+eigvals_sorted.csv
+participation_abs_norm.csv
+*.fig
+*.png
+*.pdf
+*.asv
+```
 
-*Figure 2. Example data center model with UPS-supplied IT loads, VFD-driven cooling loads, and static lighting loads.*
+If exact figure reproduction is needed, run the scripts from their respective folders and save the generated figures manually.
 
-The simulation sequence is as follows:
+## Notes on modifying experiments
 
-1. **Initialization (t = 0–5 s):** The IT load is initialized to 0.6 pu. The cooling load, represented by an induction motor, accelerates toward steady operation under the commanded V/F profile.
+Common parameters are defined near the beginning of each main script. Useful entries include:
 
-2. **Grid-side disturbance (t = 5 s):** A voltage dip is applied at 5 s, and the voltage begins to recover at 6.5 s. This event illustrates the responses of the data center components, particularly the UPS, to the voltage dip and recovery according to the implemented voltage ride-through logic.
+- `p.p_load0`, `p.p_load1`, and `p.sin_amp` in the SDCIB scripts,
+- controller bandwidth targets in the `tg` structure of `SDCIB.m`,
+- grid impedance or SCR-related parameters in `SDCIB.m`,
+- `scale_lev` and Bus 8 data-center loading in `case9.m`, and
+- the parameter structure returned by `src/case9/default_datacenter_params.m`.
 
-3. **Workload-side disturbance (t = 12 s onward):** A periodic square-wave variation is applied to the IT workload to represent power demand fluctuations associated with AI training tasks.
-
-### Case 2: Model Fidelity Comparison (`DC_EMT_compare`)
-
-This case compares the responses of the power electronic modules in `DC_EMT_lib.pslx` at different modeling fidelity levels.
-
-#### IT Loads
-
-The average, switching, and reduced-order models are compared under the following simulation sequence:
-
-1. **Initialization (t = 0–2 s):** The IT load is initialized to 0.6 pu.
-
-2. **Grid-side disturbance (t = 2 s):** A voltage dip is applied at 2 s, and the voltage begins to recover at 2.5 s.
-
-3. **Workload-side disturbance (t = 6 s onward):** A periodic square-wave variation is applied to the IT workload to represent power demand fluctuations associated with AI training tasks.
-
-These disturbances allow the three model variants to be compared under both grid-side and workload-side changes.
-
-#### Cooling Loads
-
-The cooling-load model is initialized during the first 5 s. At 5 s, the voltage-dip profile used for the IT-load comparison is applied to the cooling-load supply. This test compares the responses of the average and switching models to a grid-side disturbance.
-
-Together, these comparisons illustrate how modeling fidelity affects simulated dynamic responses and support model selection for different study objectives.
+For a new workload trace, place the data in `GPU_data.csv` or adjust the file name and column names in the scripts that call `readtable`.
 
 ## Citation
 
-If you use this model in your research, please cite the software repository:
-
-> X. Zhao, Y. Tang, and J. Zhao, *Generic EMT Modeling of Data Center Load v0 (DC_EMTv0)*, version v0, Dartmouth College, 2026. [Software]. Available: [GitHub repository](https://github.com/xingyuz-phd/Generic-EMT-Modeling-of-Data-Center-Load).
-
-### BibTeX
+If this code is used in academic work, please cite the associated manuscript:
 
 ```bibtex
-@misc{zhao2026dcemt,
-  author       = {Zhao, Xingyu and Tang, Yingyi and Zhao, Junbo},
-  title        = {Generic {EMT} Modeling of Data Center Load v0 ({DC\_EMTv0})},
-  year         = {2026},
-  howpublished = {GitHub repository},
-  url          = {https://github.com/xingyuz-phd/Generic-EMT-Modeling-of-Data-Center-Load},
-  note         = {Version v0, Dartmouth College}
+@article{zhao2026datacenter,
+  title   = {Dynamic Modeling of Data-Center Power Delivery for Power System Resonance Analysis},
+  author  = {Zhao, Xingyu and Zhao, Junbo},
+  journal = {arXiv preprint arXiv:2604.06624},
+  year    = {2026}
 }
 ```
 
-## Contact
+## License
 
-For questions about the model, please contact Xingyu Zhao at [xingyu.zhao.th@dartmouth.edu](mailto:xingyu.zhao.th@dartmouth.edu).
+No license file is included in this packaged code release. Add a `LICENSE` file before making the repository public if a specific open-source license is intended.
