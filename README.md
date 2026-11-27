@@ -1,6 +1,6 @@
-# DC-RMS: Data Center Computing Load RMS & EMT Models
+# DC-RMS: Data Center Computing Load RMS odels
 
-DC-RMS provides an open-source MATLAB RMS model of AI data center computing loads supplied by an uninterruptible power supply (UPS). The PSCAD/EMTDC cases used to benchmark the RMS model are based on the [Generic EMT Modeling of Data Center Load repository](https://github.com/xingyuz-phd/Generic-EMT-Modeling-of-Data-Center-Load). Xingyu Zhao, Yingyi Tang, and Junbo Zhao describe the underlying EMT model in [*Open-Source Multi-Fidelity EMT Modeling of Data Center Loads for Power System Studies*](https://arxiv.org/abs/2611.10179) (2026).
+DC-RMS provides an open-source MATLAB RMS model of AI data center computing loads supplied by an uninterruptible power supply (UPS). The PSCAD/EMTDC cases used to benchmark the RMS model are based on the [Generic EMT Modeling of Data Center Load repository](https://github.com/xingyuz-phd/Generic-EMT-Modeling-of-Data-Center-Load).
 
 This repository accompanies the following paper on RMS model development, validation against EMT simulations, and analysis of how computing load fluctuations propagate to the grid.
 
