@@ -22,7 +22,15 @@ The figure below shows the power path from the grid to the computing chips. In n
 
 ## From EMT to RMS
 
-The RMS model is derived from the EMT model by exploiting the separation between fast inner current loops and slower outer voltage loops. Assuming ideal current tracking and negligible inductor energy, we replace the switching stages and inner current controllers with controlled current sources. For the single-phase PSUs and downstream buck converters, we average the power-balance equations over one fundamental cycle. When the voltage and load envelopes vary slowly and the within-cycle ripple is small, this removes the explicit 120 Hz ripple while preserving the slower capacitor-energy and voltage-control dynamics. Under balanced loading with identical phase parameters and initial averaged states, one averaged model represents all three phases. For the UPS, balanced operation and fast grid synchronization allow us to eliminate the phase-angle and redundant q-axis dynamics, yielding a DC-equivalent model. The resulting per-unit differential-algebraic equations describe how energy is stored in the capacitors and transferred between conversion stages in normal, battery backup, and bypass modes.
+- **Simplify the inner current loops.** The inner current loops operate much faster than the outer voltage loops. Assuming ideal current tracking and negligible inductor energy, we replace the switching stages and inner current controllers with controlled current sources.
+
+- **Average the PSU and downstream load dynamics.** We average the power-balance equations for each phase’s PSUs and downstream buck converters over one fundamental cycle. When the voltage and load envelopes vary slowly and the within-cycle ripple is small, averaging removes the explicit 120 Hz ripple while preserving the slower capacitor-energy and voltage-control dynamics.
+
+- **Use one averaged model for all three phases.** Under balanced loading, identical phase parameters and initial averaged states yield the same averaged dynamics across phases.
+
+- **Derive a DC-equivalent UPS model.** Balanced operation and fast grid synchronization allow us to eliminate the phase-angle and redundant q-axis dynamics while retaining the UPS capacitor-energy and voltage-control dynamics.
+
+- **Assemble the per-unit RMS model.** The resulting differential-algebraic equations describe capacitor energy storage and power transfer between conversion stages in normal, battery backup, and bypass modes.
 
 ## RMS Model Benchmarking Against EMT Simulations
 
