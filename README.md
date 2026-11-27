@@ -30,18 +30,6 @@ DC-RMS/
     └── Fig1_*.pdf ... Fig8_*.pdf
 ```
 
-## Quick Start
-
-Requires **MATLAB** (R2020b+, Optimization Toolbox for `fsolve`). Pre-exported per-unit EMT datasets are included in `RMS/`, so PSCAD/EMTDC is optional.
-
-```matlab
-cd RMS
-DC_RMS_Normal               % Fig. 1 (VRT) & Fig. 2 (Load propagation)
-DC_RMS_Bypass               % Fig. 3 (Normal <-> Bypass transition)
-DC_RMS_Modal_Normal         % Fig. 4 & Fig. 5 (Normal-mode modal & gain analysis)
-DC_RMS_Modal_Bypass         % Fig. 6 & Fig. 7 (Bypass-mode modal & gain analysis)
-DC_RMS_Oscillation_Normal   % Fig. 8 (6 Hz resonant amplification validation)
-```
 
 ## Unified Per-Unit Base
 
