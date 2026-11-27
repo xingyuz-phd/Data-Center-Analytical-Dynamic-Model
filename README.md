@@ -20,6 +20,10 @@ The figure below shows the power path from the grid to the computing chips. In n
   <img src="docs/figures/topology_datacenter.png" width="90%" alt="Grid-to-chip power path showing the centralized UPS, battery and bypass connections, and single-phase server power supplies distributed across three phases">
 </p>
 
+## From EMT to RMS
+
+The RMS model is derived from the EMT model by exploiting the separation between fast inner current loops and slower outer voltage loops. Assuming ideal current tracking and negligible inductor energy, we replace the switching stages and inner current controllers with controlled current sources. For the single-phase PSUs and downstream buck converters, we average the power-balance equations over one fundamental cycle. When the voltage and load envelopes vary slowly and the within-cycle ripple is small, this removes the explicit 120 Hz ripple while preserving the slower capacitor-energy and voltage-control dynamics. Under balanced loading with identical phase parameters and initial averaged states, one averaged model represents all three phases. For the UPS, balanced operation and fast grid synchronization allow us to eliminate the phase-angle and redundant q-axis dynamics, yielding a DC-equivalent model. The resulting per-unit differential-algebraic equations describe how energy is stored in the capacitors and transferred between conversion stages in normal, battery backup, and bypass modes.
+
 ## RMS Model Benchmarking Against EMT Simulations
 
 ### 1. Voltage Ride-Through and Battery Recovery (`DC_RMS_Normal.m`)
