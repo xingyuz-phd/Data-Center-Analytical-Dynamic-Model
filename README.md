@@ -1,97 +1,125 @@
 # DC-RMS: Data Center Computing Load RMS & EMT Models
 
-Open-source **MATLAB RMS** and **PSCAD/EMTDC EMT** models of UPS-fed AI data center computing loads for power system stability and oscillation studies, developed at the **Thayer School of Engineering, Dartmouth College**.
+DC-RMS provides an open-source MATLAB RMS model of AI data center computing loads supplied by an uninterruptible power supply (UPS). The PSCAD/EMTDC cases used to benchmark the RMS model are based on the [Generic EMT Modeling of Data Center Load repository](https://github.com/xingyuz-phd/Generic-EMT-Modeling-of-Data-Center-Load). Xingyu Zhao, Yingyi Tang, and Junbo Zhao describe the underlying EMT model in [*Open-Source Multi-Fidelity EMT Modeling of Data Center Loads for Power System Studies*](https://arxiv.org/abs/2611.10179) (2026).
 
-Accompanying paper:
+This repository accompanies the following paper on RMS model development, validation against EMT simulations, and analysis of how computing load fluctuations propagate to the grid.
+
 > **Dynamic Modeling of Data Center Computing Loads for Power System Studies: From EMT to RMS**  
-> Xingyu Zhao, Junbo Zhao, and Yingyi Tang — Thayer School of Engineering, Dartmouth College
+> Xingyu Zhao, Junbo Zhao, and Yingyi Tang  
+> Thayer School of Engineering, Dartmouth College
 
 ## Repository Structure
 
 ```text
 DC-RMS/
 ├── README.md
-├── docs/figures/                           # PNG result figures rendered below
-├── EMT/                                    # PSCAD/EMTDC benchmark models
-│   ├── DC_EMT_lib.pslx
-│   ├── DC_EMT_ws.pswx
-│   ├── DC_EMT_normal.pscx                  # Normal-mode VRT & square-wave load
-│   ├── DC_EMT_bypass.pscx                  # Normal <-> Bypass mode switching
-│   └── DC_EMT_normal_oscillation.pscx      # 6 Hz small-signal amplification
-└── RMS/                                    # MATLAB RMS scripts, data & vector PDFs
-    ├── DC_RMS_Normal.m                     # Fig. 1 & Fig. 2
+├── docs/figures/                           # PNG figures displayed below
+├── EMT/                                    # PSCAD/EMTDC benchmark cases
+│   ├── DC_EMT_lib.pslx                     # EMT component library
+│   ├── DC_EMT_ws.pswx                      # PSCAD workspace
+│   ├── DC_EMT_normal.pscx                  # Voltage sag and square-wave load cases
+│   ├── DC_EMT_bypass.pscx                  # Normal-to-bypass and return transitions
+│   └── DC_EMT_normal_oscillation.pscx      # 6 Hz load perturbation
+└── RMS/                                    # MATLAB scripts, EMT reference data, and figures
+    ├── DC_RMS_Normal.m                     # Figs. 1 and 2
     ├── DC_RMS_Bypass.m                     # Fig. 3
-    ├── DC_RMS_Modal_Normal.m               # Fig. 4 & Fig. 5
-    ├── DC_RMS_Modal_Bypass.m               # Fig. 6 & Fig. 7
+    ├── DC_RMS_Modal_Normal.m               # Figs. 4 and 5
+    ├── DC_RMS_Modal_Bypass.m               # Figs. 6 and 7
     ├── DC_RMS_Oscillation_Normal.m         # Fig. 8
     ├── Normal_EMT_PerUnit_Data.xlsx
     ├── Bypass_EMT_PerUnit_Data.xlsx
     ├── Normal_Oscillation_EMT_PerUnit_Data.xlsx
-    └── Fig1_*.pdf ... Fig8_*.pdf
+    └── Fig1_*.pdf ... Fig8_*.pdf            # Vector figures
 ```
-## RMS & EMT Model Benchmarking
-During a grid voltage sag to $0.45\,p.u.$, the UPS transitions to battery backup mode after the VRT ride-through limit and reconnects with a battery soft-recovery ramp once voltage recovers. The RMS model closely tracks the EMT trajectories across $V_g$, $p_g$, $v_{dc}$, and $v_{pfc}$, while the analytical envelope $v_{pfc}^{av} \pm \Delta v_{pfc}$ tightly bounds the three-phase $2\omega$ ($120\,Hz$) EMT ripple.
+
+## RMS Model Benchmarking Against EMT Simulations
+
+### 1. Voltage Ride-Through and Battery Recovery (`DC_RMS_Normal.m`)
+
+When grid voltage falls to 0.45 p.u. and the sag persists beyond the voltage ride-through (VRT) time limit, the UPS transfers to battery backup. Once grid voltage recovers, the UPS reconnects to the grid and ramps down battery support.
+
+The RMS model closely tracks the EMT results for grid voltage $V_g$, grid active power $p_g$, UPS DC-link voltage $v_{dc}$, and the average power-factor-correction (PFC) capacitor voltage $v_{pfc}^{av}$. The analytical envelope $v_{pfc}^{av} \pm \Delta v_{pfc}$ closely bounds the 120 Hz ($2\omega$) ripple in the EMT voltage waveform of each phase.
 
 <p align="center">
-<img src="docs/figures/Fig1_VRT_1_to_5s.png" width="72%" alt="VRT and Battery Backup Benchmark">
+  <img src="docs/figures/Fig1_VRT_1_to_5s.png" width="72%" alt="RMS and EMT responses during a voltage sag, transfer to battery backup, and grid reconnection">
 </p>
 
-### 2. Rapid Computing Load Fluctuation Propagation (`DC_RMS_Normal.m`)
+### 2. Propagation of Computing Load Fluctuations (`DC_RMS_Normal.m`)
 
-To emulate rapid GPU workload swings in AI training/inference, a periodic square-wave demand ($0.18\text{--}0.78\,p.u.$, $0.5\,Hz$, $70\%$ duty cycle) is applied to $p_{chip,3\phi}$. The RMS model accurately captures downstream-to-upstream disturbance propagation through the PSU and UPS stages to the grid.
+A 0.5 Hz square wave varies the three-phase computing demand $p_{chip,3\phi}$ between 0.18 and 0.78 p.u., with a 70% duty cycle, to represent recurring GPU workload swings. The RMS model reproduces how the downstream power supply units (PSUs) and the upstream UPS shape the power fluctuations observed at the grid connection.
 
 <p align="center">
-<img src="docs/figures/Fig2_LoadProp_5_to_10s.png" width="72%" alt="Computing Load Propagation Benchmark">
+  <img src="docs/figures/Fig2_LoadProp_5_to_10s.png" width="72%" alt="Propagation of a square-wave computing load through the PSU and UPS to the grid">
 </p>
 
-### 3. Normal ↔ Bypass Mode Switching (`DC_RMS_Bypass.m`)
+### 3. Switching Between Normal and Bypass Modes (`DC_RMS_Bypass.m`)
 
-Initialized at $p_{chip,3\phi}=0.7\,p.u.$, switching from normal to bypass mode ($t=0.5\,s$) induces transients in $v_{dc}$ and $p_g$ while leaving $v_{pfc}$ undisturbed. Returning to normal mode ($t=1.5\,s$) causes transients across $v_{dc}$, $p_g$, and $v_{pfc}$ as the VSI ramps its output current from zero. Both transitions match the EMT benchmark closely.
+The UPS starts in normal mode with $p_{chip,3\phi}=0.7$ p.u. At $t=0.5$ s, switching to bypass produces transients in $v_{dc}$ and $p_g$, while $v_{pfc}$ remains essentially unchanged. At $t=1.5$ s, the UPS returns to normal mode. As the voltage-source inverter (VSI) ramps its output current up from zero, all three quantities exhibit transients. The RMS model closely follows the EMT response during both transitions.
 
 <p align="center">
-<img src="docs/figures/Fig3_Bypass_2_to_5s.png" width="72%" alt="Normal to Bypass Mode Transition Benchmark">
+  <img src="docs/figures/Fig3_Bypass_2_to_5s.png" width="72%" alt="RMS and EMT responses as the UPS switches to bypass and returns to normal mode">
 </p>
 
-## Small-Signal Modal & Power-Swing Amplification Analysis
+## Small-Signal Analysis of Oscillatory Modes and Power Amplification
 
 ### Normal Mode (`DC_RMS_Modal_Normal.m`)
 
-In normal mode (8 active states), the double-conversion UPS decouples the downstream PSUs from grid reactance $X_g$. Increasing $p_{chip,3\phi}$ or $X_g$ shifts the AFE–Grid mode rightward and raises grid coupling gain abruptly near the static voltage-stability limit. Conversely, lowering the VSI voltage-loop bandwidth $f_{bw,vsi}$ destabilizes the internal VSI–PSU feedback loop (crossing the imaginary axis near $21.5\,Hz$) and strongly amplifies the internal gain around $6\,Hz$.
+The normal-mode model has eight active states. The double-conversion UPS isolates the downstream PSUs from direct grid coupling. Increasing either computing demand $p_{chip,3\phi}$ or grid reactance $X_g$ shifts the mode associated with the active front end (AFE) and the grid toward the imaginary axis. The grid-coupling gain rises sharply as the operating point approaches the static voltage-stability limit.
+
+The VSI voltage-loop bandwidth $f_{bw,vsi}$ governs a separate interaction between the VSI and the downstream PSUs. Reducing this bandwidth increases the internal gain near 6 Hz. The VSI–PSU mode becomes unstable when the **voltage-loop bandwidth** falls below approximately 21.5 Hz.
 
 <p align="center">
-<img src="docs/figures/Fig4_Modal_RootLocus.png" width="90%" alt="Normal Mode Eigenvalue Root Locus">
+  <img src="docs/figures/Fig4_Modal_RootLocus.png" width="90%" alt="Normal-mode eigenvalue trajectories as computing demand, grid reactance, and VSI voltage-loop bandwidth vary">
 </p>
+
 <p align="center">
-<img src="docs/figures/Fig5_Gain_FreqResp.png" width="90%" alt="Normal Mode Gain Frequency Response">
+  <img src="docs/figures/Fig5_Gain_FreqResp.png" width="90%" alt="Normal-mode frequency responses for internal and grid-coupling gains">
 </p>
 
 ### Bypass Mode (`DC_RMS_Modal_Bypass.m`)
 
-In bypass mode (6 active states, VSI disconnected), the PSUs connect directly to the grid POI. Without UPS isolation, heavy loading or weak grid conditions drive the PSU–Grid mode sharply toward the imaginary axis and produce substantially larger, lower-frequency grid-coupling resonance peaks ($3.11\times$ near $1.5\,Hz$ at $X_g=0.63\,p.u.$).
+In bypass mode, the VSI is disconnected and the PSUs connect directly to the grid at the point of interconnection. Six states remain active. Increasing computing demand or grid reactance moves the PSU–grid mode toward the imaginary axis. Compared with normal operation, the grid-coupling resonance is stronger and occurs at a lower frequency. At $X_g=0.63$ p.u., the grid-coupling gain peaks at $3.11\times$ near 1.5 Hz.
 
 <p align="center">
-<img src="docs/figures/Fig6_Bypass_RootLocus.png" width="90%" alt="Bypass Mode Eigenvalue Root Locus">
-</p>
-<p align="center">
-<img src="docs/figures/Fig7_Bypass_Gain_FreqResp.png" width="90%" alt="Bypass Mode Gain Frequency Response">
+  <img src="docs/figures/Fig6_Bypass_RootLocus.png" width="90%" alt="Bypass-mode eigenvalue trajectories as computing demand and grid reactance vary">
 </p>
 
-### EMT Validation of 6 Hz Resonant Amplification (`DC_RMS_Oscillation_Normal.m`)
+<p align="center">
+  <img src="docs/figures/Fig7_Bypass_Gain_FreqResp.png" width="90%" alt="Bypass-mode frequency responses showing the grid-coupling resonance">
+</p>
 
-Applying a small $6\,Hz$, $\pm 0.02\,p.u.$ sinusoidal perturbation to $p_{chip,3\phi}$ at $f_{bw,vsi}=25\,Hz$ confirms strong resonant amplification at the grid terminal ($4.64\times$ **in EMT** vs. $5.23\times$ **in RMS**, with closely aligned phase), directly validating the frequency-domain prediction.
+### EMT Validation of Resonant Amplification at 6 Hz (`DC_RMS_Oscillation_Normal.m`)
+
+With the VSI voltage-loop bandwidth set to 25 Hz, a 6 Hz sinusoidal perturbation of amplitude 0.02 p.u. is applied to $p_{chip,3\phi}$. The resulting grid active-power oscillation has **4.64 times the input amplitude in EMT** and **5.23 times the input amplitude in RMS**. The two responses also agree closely in phase. The EMT benchmark confirms the predicted amplification at 6 Hz, with the RMS model giving a somewhat higher gain.
 
 <p align="center">
-<img src="docs/figures/Fig8_Normal_Oscillation_6Hz.png" width="72%" alt="6 Hz Small-Signal Resonant Amplification Validation">
+  <img src="docs/figures/Fig8_Normal_Oscillation_6Hz.png" width="72%" alt="RMS and EMT grid-power responses to a 6 Hz sinusoidal computing load perturbation">
 </p>
 
 ## Citation
 
-```
-@article{Zhao2026DCRMS,
-  author  = {Xingyu Zhao and Junbo Zhao and Yingyi Tang},
-  title   = {Dynamic Modeling of Data Center Computing Loads for Power System Studies: From {EMT} to {RMS}},
-  year    = {2026},
-  note    = {Preprint / Under Review}
-}
+If you use the RMS model or the analyses in this repository, please cite the accompanying paper.
 
+```bibtex
+@misc{Zhao2026DCRMS,
+  author = {Zhao, Xingyu and Zhao, Junbo and Tang, Yingyi},
+  title  = {Dynamic Modeling of Data Center Computing Loads for Power System Studies: From {EMT} to {RMS}},
+  year   = {2026},
+  note   = {Preprint under review}
+}
+```
+
+If you use the PSCAD/EMTDC benchmark models, please also cite the paper describing the underlying EMT model.
+
+```bibtex
+@misc{Zhao2026DCEMT,
+  author        = {Zhao, Xingyu and Tang, Yingyi and Zhao, Junbo},
+  title         = {Open-Source Multi-Fidelity {EMT} Modeling of Data Center Loads for Power System Studies},
+  year          = {2026},
+  eprint        = {2611.10179},
+  archivePrefix = {arXiv},
+  primaryClass  = {eess.SY},
+  doi           = {10.48550/arXiv.2611.10179},
+  url           = {https://arxiv.org/abs/2611.10179}
+}
 ```
