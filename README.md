@@ -48,34 +48,6 @@ The UPS starts in normal mode with $p_{chip,3\phi}=0.7$ p.u. At $t=0.5$ s, switc
   <img src="docs/figures/Fig3_Bypass_2_to_5s.png" width="72%" alt="RMS and EMT responses as the UPS switches to bypass and returns to normal mode">
 </p>
 
-## Small-Signal Analysis of Oscillatory Modes and Power Amplification
-
-### Normal Mode (`DC_RMS_Modal_Normal.m`)
-
-The normal-mode model has eight active states. The double-conversion UPS isolates the downstream PSUs from direct grid coupling. Increasing either computing demand $p_{chip,3\phi}$ or grid reactance $X_g$ shifts the mode associated with the active front end (AFE) and the grid toward the imaginary axis. The grid-coupling gain rises sharply as the operating point approaches the static voltage-stability limit.
-
-The VSI voltage-loop bandwidth $f_{bw,vsi}$ governs a separate interaction between the VSI and the downstream PSUs. Reducing this bandwidth increases the internal gain near 6 Hz. The VSI–PSU mode becomes unstable when the **voltage-loop bandwidth** falls below approximately 21.5 Hz.
-
-<p align="center">
-  <img src="docs/figures/Fig4_Modal_RootLocus.png" width="90%" alt="Normal-mode eigenvalue trajectories as computing demand, grid reactance, and VSI voltage-loop bandwidth vary">
-</p>
-
-<p align="center">
-  <img src="docs/figures/Fig5_Gain_FreqResp.png" width="90%" alt="Normal-mode frequency responses for internal and grid-coupling gains">
-</p>
-
-### Bypass Mode (`DC_RMS_Modal_Bypass.m`)
-
-In bypass mode, the VSI is disconnected and the PSUs connect directly to the grid at the point of interconnection. Six states remain active. Increasing computing demand or grid reactance moves the PSU–grid mode toward the imaginary axis. Compared with normal operation, the grid-coupling resonance is stronger and occurs at a lower frequency. At $X_g=0.63$ p.u., the grid-coupling gain peaks at $3.11\times$ near 1.5 Hz.
-
-<p align="center">
-  <img src="docs/figures/Fig6_Bypass_RootLocus.png" width="90%" alt="Bypass-mode eigenvalue trajectories as computing demand and grid reactance vary">
-</p>
-
-<p align="center">
-  <img src="docs/figures/Fig7_Bypass_Gain_FreqResp.png" width="90%" alt="Bypass-mode frequency responses showing the grid-coupling resonance">
-</p>
-
 ### EMT Validation of Resonant Amplification at 6 Hz (`DC_RMS_Oscillation_Normal.m`)
 
 With the VSI voltage-loop bandwidth set to 25 Hz, a 6 Hz sinusoidal perturbation of amplitude 0.02 p.u. is applied to $p_{chip,3\phi}$. The resulting grid active-power oscillation has **4.64 times the input amplitude in EMT** and **5.23 times the input amplitude in RMS**. The two responses also agree closely in phase. The EMT benchmark confirms the predicted amplification at 6 Hz, with the RMS model giving a somewhat higher gain.
