@@ -29,11 +29,7 @@ DC-RMS/
     ├── Normal_Oscillation_EMT_PerUnit_Data.xlsx
     └── Fig1_*.pdf ... Fig8_*.pdf
 ```
-
-## RMS vs. EMT Time-Domain Validation
-
-### 1. Grid Voltage Sag & VRT Battery Backup Transition (`DC_RMS_Normal.m`)
-
+## EMT & RMS Model Benchmarking
 During a grid voltage sag to $0.45~p.u.$, the UPS transitions to battery backup mode after the VRT ride-through limit and reconnects with a battery soft-recovery ramp once voltage recovers. The RMS model closely tracks the EMT trajectories across $V_g$, $p_g$, $v_{dc}$, and $v_{pfc}$, while the analytical envelope $v_{pfc}^{av} \pm \Delta v_{pfc}$ tightly bounds the three-phase $2\omega$ ($120~Hz$) EMT ripple.
 
 <p align="center">
