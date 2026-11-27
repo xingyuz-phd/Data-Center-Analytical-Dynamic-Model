@@ -1,6 +1,8 @@
 # DC-RMS: Data Center Computing Load RMS odels
 
-DC-RMS provides an open-source MATLAB RMS model of AI data center computing loads supplied by an uninterruptible power supply (UPS). The PSCAD/EMTDC cases used to benchmark the RMS model are based on the [Generic EMT Modeling of Data Center Load repository](https://github.com/xingyuz-phd/Generic-EMT-Modeling-of-Data-Center-Load).
+DC-RMS provides an open-source MATLAB RMS model of AI data center computing loads supplied by an uninterruptible power supply (UPS). 
+
+The PSCAD/EMTDC cases used to benchmark the RMS model are based on the [Generic EMT Modeling of Data Center Load repository](https://github.com/xingyuz-phd/Generic-EMT-Modeling-of-Data-Center-Load).
 
 This repository accompanies the following paper on RMS model development, validation against EMT simulations, and analysis of how computing load fluctuations propagate to the grid.
 
@@ -31,6 +33,14 @@ DC-RMS/
     ├── Normal_Oscillation_EMT_PerUnit_Data.xlsx
     └── Fig1_*.pdf ... Fig8_*.pdf            # Vector figures
 ```
+
+## Data Center Computing Load Topology
+
+The figure below shows the power path from the grid to the computing chips. In normal operation, a transformer feeds a centralized double-conversion uninterruptible power supply (UPS). Its active front end (AFE) converts grid AC to DC, and its voltage-source inverter (VSI) converts the DC-link voltage back to three-phase AC. A battery energy storage system (BESS) connects to the DC link through a bidirectional DC–DC converter and supplies the inverter during battery backup. In bypass mode, the transformer feeds the load directly through the bypass switch. Across phases $a$, $b$, and $c$, single-phase server power supply units (PSUs) convert AC to DC, and downstream DC–DC converters regulate the voltage supplied to the computing chips.
+
+<p align="center">
+  <img src="docs/figures/topology_datacenter.png" width="90%" alt="Grid-to-chip power path showing the centralized UPS, battery and bypass connections, and single-phase server power supplies distributed across three phases">
+</p>
 
 ## RMS Model Benchmarking Against EMT Simulations
 
