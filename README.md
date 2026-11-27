@@ -26,7 +26,7 @@ The RMS model is derived from the EMT model by exploiting the separation between
 
 ## RMS Model Benchmarking Against EMT Simulations
 
-### 1. Voltage Ride-Through and Battery Recovery (`DC_RMS_Normal.m`)
+### 1. Load Transfer and Reconnection (`DC_RMS_Normal.m`)
 
 When grid voltage falls to 0.45 p.u. and the sag persists beyond the voltage ride-through (VRT) time limit, the UPS transfers to battery backup. Once grid voltage recovers, the UPS reconnects to the grid and ramps down battery support.
 
