@@ -29,8 +29,8 @@ DC-RMS/
     ├── Normal_Oscillation_EMT_PerUnit_Data.xlsx
     └── Fig1_*.pdf ... Fig8_*.pdf
 ```
-## EMT & RMS Model Benchmarking
-During a grid voltage sag to $0.45~p.u.$, the UPS transitions to battery backup mode after the VRT ride-through limit and reconnects with a battery soft-recovery ramp once voltage recovers. The RMS model closely tracks the EMT trajectories across $V_g$, $p_g$, $v_{dc}$, and $v_{pfc}$, while the analytical envelope $v_{pfc}^{av} \pm \Delta v_{pfc}$ tightly bounds the three-phase $2\omega$ ($120~Hz$) EMT ripple.
+## RMS & EMT Model Benchmarking
+During a grid voltage sag to $0.45\,p.u.$, the UPS transitions to battery backup mode after the VRT ride-through limit and reconnects with a battery soft-recovery ramp once voltage recovers. The RMS model closely tracks the EMT trajectories across $V_g$, $p_g$, $v_{dc}$, and $v_{pfc}$, while the analytical envelope $v_{pfc}^{av} \pm \Delta v_{pfc}$ tightly bounds the three-phase $2\omega$ ($120\,Hz$) EMT ripple.
 
 <p align="center">
 <img src="docs/figures/Fig1_VRT_1_to_5s.png" width="72%" alt="VRT and Battery Backup Benchmark">
@@ -38,7 +38,7 @@ During a grid voltage sag to $0.45~p.u.$, the UPS transitions to battery backup 
 
 ### 2. Rapid Computing Load Fluctuation Propagation (`DC_RMS_Normal.m`)
 
-To emulate rapid GPU workload swings in AI training/inference, a periodic square-wave demand ($0.18\text{--}0.78~p.u.$, $0.5~Hz$, $70\%$ duty cycle) is applied to $p_{chip,3\phi}$. The RMS model accurately captures downstream-to-upstream disturbance propagation through the PSU and UPS stages to the grid.
+To emulate rapid GPU workload swings in AI training/inference, a periodic square-wave demand ($0.18\text{--}0.78\,p.u.$, $0.5\,Hz$, $70\%$ duty cycle) is applied to $p_{chip,3\phi}$. The RMS model accurately captures downstream-to-upstream disturbance propagation through the PSU and UPS stages to the grid.
 
 <p align="center">
 <img src="docs/figures/Fig2_LoadProp_5_to_10s.png" width="72%" alt="Computing Load Propagation Benchmark">
@@ -46,7 +46,7 @@ To emulate rapid GPU workload swings in AI training/inference, a periodic square
 
 ### 3. Normal ↔ Bypass Mode Switching (`DC_RMS_Bypass.m`)
 
-Initialized at $p_{chip,3\phi}=0.7~p.u.$, switching from normal to bypass mode ($t=0.5~s$) induces transients in $v_{dc}$ and $p_g$ while leaving $v_{pfc}$ undisturbed. Returning to normal mode ($t=1.5~s$) causes transients across $v_{dc}$, $p_g$, and $v_{pfc}$ as the VSI ramps its output current from zero. Both transitions match the EMT benchmark closely.
+Initialized at $p_{chip,3\phi}=0.7\,p.u.$, switching from normal to bypass mode ($t=0.5\,s$) induces transients in $v_{dc}$ and $p_g$ while leaving $v_{pfc}$ undisturbed. Returning to normal mode ($t=1.5\,s$) causes transients across $v_{dc}$, $p_g$, and $v_{pfc}$ as the VSI ramps its output current from zero. Both transitions match the EMT benchmark closely.
 
 <p align="center">
 <img src="docs/figures/Fig3_Bypass_2_to_5s.png" width="72%" alt="Normal to Bypass Mode Transition Benchmark">
@@ -56,7 +56,7 @@ Initialized at $p_{chip,3\phi}=0.7~p.u.$, switching from normal to bypass mode (
 
 ### Normal Mode (`DC_RMS_Modal_Normal.m`)
 
-In normal mode (8 active states), the double-conversion UPS decouples the downstream PSUs from grid reactance $X_g$. Increasing $p_{chip,3\phi}$ or $X_g$ shifts the AFE–Grid mode rightward and raises grid coupling gain abruptly near the static voltage-stability limit. Conversely, lowering the VSI voltage-loop bandwidth $f_{bw,vsi}$ destabilizes the internal VSI–PSU feedback loop (crossing the imaginary axis near $21.5~Hz$) and strongly amplifies the internal gain around $6~Hz$.
+In normal mode (8 active states), the double-conversion UPS decouples the downstream PSUs from grid reactance $X_g$. Increasing $p_{chip,3\phi}$ or $X_g$ shifts the AFE–Grid mode rightward and raises grid coupling gain abruptly near the static voltage-stability limit. Conversely, lowering the VSI voltage-loop bandwidth $f_{bw,vsi}$ destabilizes the internal VSI–PSU feedback loop (crossing the imaginary axis near $21.5\,Hz$) and strongly amplifies the internal gain around $6\,Hz$.
 
 <p align="center">
 <img src="docs/figures/Fig4_Modal_RootLocus.png" width="90%" alt="Normal Mode Eigenvalue Root Locus">
@@ -67,7 +67,7 @@ In normal mode (8 active states), the double-conversion UPS decouples the downst
 
 ### Bypass Mode (`DC_RMS_Modal_Bypass.m`)
 
-In bypass mode (6 active states, VSI disconnected), the PSUs connect directly to the grid POI. Without UPS isolation, heavy loading or weak grid conditions drive the PSU–Grid mode sharply toward the imaginary axis and produce substantially larger, lower-frequency grid-coupling resonance peaks ($3.11\times$ near $1.5~Hz$ at $X_g=0.63~p.u.$).
+In bypass mode (6 active states, VSI disconnected), the PSUs connect directly to the grid POI. Without UPS isolation, heavy loading or weak grid conditions drive the PSU–Grid mode sharply toward the imaginary axis and produce substantially larger, lower-frequency grid-coupling resonance peaks ($3.11\times$ near $1.5\,Hz$ at $X_g=0.63\,p.u.$).
 
 <p align="center">
 <img src="docs/figures/Fig6_Bypass_RootLocus.png" width="90%" alt="Bypass Mode Eigenvalue Root Locus">
@@ -78,7 +78,7 @@ In bypass mode (6 active states, VSI disconnected), the PSUs connect directly to
 
 ### EMT Validation of 6 Hz Resonant Amplification (`DC_RMS_Oscillation_Normal.m`)
 
-Applying a small $6~Hz$, $\pm 0.02~p.u.$ sinusoidal perturbation to $p_{chip,3\phi}$ at $f_{bw,vsi}=25~Hz$ confirms strong resonant amplification at the grid terminal ($4.64\times$ **in EMT** vs. $5.23\times$ **in RMS**, with closely aligned phase), directly validating the frequency-domain prediction.
+Applying a small $6\,Hz$, $\pm 0.02\,p.u.$ sinusoidal perturbation to $p_{chip,3\phi}$ at $f_{bw,vsi}=25\,Hz$ confirms strong resonant amplification at the grid terminal ($4.64\times$ **in EMT** vs. $5.23\times$ **in RMS**, with closely aligned phase), directly validating the frequency-domain prediction.
 
 <p align="center">
 <img src="docs/figures/Fig8_Normal_Oscillation_6Hz.png" width="72%" alt="6 Hz Small-Signal Resonant Amplification Validation">
