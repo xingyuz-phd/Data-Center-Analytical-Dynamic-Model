@@ -10,29 +10,7 @@ This repository accompanies the following paper on RMS model development, valida
 > Xingyu Zhao, Junbo Zhao, and Yingyi Tang  
 > Thayer School of Engineering, Dartmouth College
 
-## Repository Structure
 
-```text
-DC-RMS/
-├── README.md
-├── docs/figures/                           # PNG figures displayed below
-├── EMT/                                    # PSCAD/EMTDC benchmark cases
-│   ├── DC_EMT_lib.pslx                     # EMT component library
-│   ├── DC_EMT_ws.pswx                      # PSCAD workspace
-│   ├── DC_EMT_normal.pscx                  # Voltage sag and square-wave load cases
-│   ├── DC_EMT_bypass.pscx                  # Normal-to-bypass and return transitions
-│   └── DC_EMT_normal_oscillation.pscx      # 6 Hz load perturbation
-└── RMS/                                    # MATLAB scripts, EMT reference data, and figures
-    ├── DC_RMS_Normal.m                     # Figs. 1 and 2
-    ├── DC_RMS_Bypass.m                     # Fig. 3
-    ├── DC_RMS_Modal_Normal.m               # Figs. 4 and 5
-    ├── DC_RMS_Modal_Bypass.m               # Figs. 6 and 7
-    ├── DC_RMS_Oscillation_Normal.m         # Fig. 8
-    ├── Normal_EMT_PerUnit_Data.xlsx
-    ├── Bypass_EMT_PerUnit_Data.xlsx
-    ├── Normal_Oscillation_EMT_PerUnit_Data.xlsx
-    └── Fig1_*.pdf ... Fig8_*.pdf            # Vector figures
-```
 
 ## Data Center Computing Load Topology
 
@@ -105,6 +83,30 @@ With the VSI voltage-loop bandwidth set to 25 Hz, a 6 Hz sinusoidal perturbation
 <p align="center">
   <img src="docs/figures/Fig8_Normal_Oscillation_6Hz.png" width="72%" alt="RMS and EMT grid-power responses to a 6 Hz sinusoidal computing load perturbation">
 </p>
+
+## Repository Structure
+
+```text
+DC-RMS/
+├── README.md
+├── docs/figures/                           # PNG figures displayed below
+├── EMT/                                    # PSCAD/EMTDC benchmark cases
+│   ├── DC_EMT_lib.pslx                     # EMT component library
+│   ├── DC_EMT_ws.pswx                      # PSCAD workspace
+│   ├── DC_EMT_normal.pscx                  # Voltage sag and square-wave load cases
+│   ├── DC_EMT_bypass.pscx                  # Normal-to-bypass and return transitions
+│   └── DC_EMT_normal_oscillation.pscx      # 6 Hz load perturbation
+└── RMS/                                    # MATLAB scripts, EMT reference data, and figures
+    ├── DC_RMS_Normal.m                     # Figs. 1 and 2
+    ├── DC_RMS_Bypass.m                     # Fig. 3
+    ├── DC_RMS_Modal_Normal.m               # Figs. 4 and 5
+    ├── DC_RMS_Modal_Bypass.m               # Figs. 6 and 7
+    ├── DC_RMS_Oscillation_Normal.m         # Fig. 8
+    ├── Normal_EMT_PerUnit_Data.xlsx
+    ├── Bypass_EMT_PerUnit_Data.xlsx
+    ├── Normal_Oscillation_EMT_PerUnit_Data.xlsx
+    └── Fig1_*.pdf ... Fig8_*.pdf            # Vector figures
+```
 
 ## Citation
 
