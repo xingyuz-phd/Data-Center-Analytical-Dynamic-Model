@@ -31,15 +31,6 @@ DC-RMS/
 ```
 
 
-## Unified Per-Unit Base
-
-| Parameter | Symbol | Value |
-| :--- | :--- | :--- |
-| UPS / PSU aggregation | $`M_{\mathrm{ups}}`$, $`M_{\mathrm{psu}}`$ | 30 (1.50 MVA each), 10 (0.05 MVA/ph) |
-| Common 3-phase power & AC base | $`\mathrm{S}_b`$, $`f_b`$, $`\mathrm{V}_{\mathrm{LL},b}`$ | 45.0 MVA, 60 Hz, 0.48 kV |
-| DC voltage bases (UPS / BESS / PSU / Buck) | $`\mathrm{V}_{\mathrm{dc},b}`$, $`\mathrm{V}_{\mathrm{bat},b}`$, $`\mathrm{V}_{\mathrm{pfc},b}`$, $`\mathrm{V}_{\mathrm{buck},b}`$ | 0.80, 0.40, 0.80, 0.048 kV |
-| Default Thévenin grid | $`\mathrm{V}_s`$, $`\mathrm{R}_g`$, $`\mathrm{X}_g`$ | 1.0, 0.035, 0.35 p.u. |
-
 ## RMS vs. EMT Benchmark Results
 
 ### 1. Grid Voltage Sag & VRT Backup (`DC_RMS_Normal.m`)
