@@ -79,17 +79,20 @@ DC-RMS/
 │   ├── DC_EMT_ws.pswx                      # PSCAD workspace
 │   ├── DC_EMT_normal.pscx                  # Voltage sag and square-wave load cases
 │   ├── DC_EMT_bypass.pscx                  # Normal-to-bypass and return transitions
-│   └── DC_EMT_normal_oscillation.pscx      # 6 Hz load perturbation
+│   └── DC_EMT_normal_oscillation.pscx      # 6 Hz load perturbation under weak VSI-PSU damping
+│   └── DC_EMT_bypass_oscillation.pscx      # 3 Hz load perturbation under weak grid
 └── RMS/                                    # MATLAB scripts, EMT reference data, and figures
     ├── DC_RMS_Normal.m                     # Figs. 1 and 2
     ├── DC_RMS_Bypass.m                     # Fig. 3
     ├── DC_RMS_Modal_Normal.m               # Figs. 4 and 5
     ├── DC_RMS_Modal_Bypass.m               # Figs. 6 and 7
     ├── DC_RMS_Oscillation_Normal.m         # Fig. 8
+    ├── DC_RMS_Oscillation_Bypass.m         # Fig. 8
     ├── Normal_EMT_PerUnit_Data.xlsx
     ├── Bypass_EMT_PerUnit_Data.xlsx
     ├── Normal_Oscillation_EMT_PerUnit_Data.xlsx
-    └── Fig1_*.pdf ... Fig8_*.pdf            # Vector figures
+    ├── Bypass_Oscillation_EMT_PerUnit_Data.xlsx
+    └── Fig1_*.pdf ... Fig9_*.pdf            # Vector figures
 ```
 
 ## Citation
