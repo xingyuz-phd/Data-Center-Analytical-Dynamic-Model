@@ -1,9 +1,10 @@
-<workspace name="DC_EMT_ws" version="5.0.2" crc="130166449">
+<workspace name="DC_EMT_ws" version="5.0.2" crc="54019847">
   <projects>
     <project type="library" name="DC_EMT_lib" filepath=".\DC_EMT_lib.pslx" />
     <project type="project" name="DC_EMT_bypass" filepath=".\DC_EMT_bypass.pscx" />
     <project type="project" name="DC_EMT_normal" filepath=".\DC_EMT_normal.pscx" />
     <project type="project" name="DC_EMT_normal_oscillation" filepath=".\DC_EMT_normal_oscillation.pscx" />
+    <project type="project" name="DC_EMT_bypass_oscillation" filepath=".\DC_EMT_bypass_oscillation.pscx" />
   </projects>
   <simulations />
   <pmr />

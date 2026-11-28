@@ -24,7 +24,7 @@
     <param name="Check" value="0" />
     <param name="Debug" value="0" />
     <param name="description" value="" />
-    <param name="revisor" value="xingy, 1795737089" />
+    <param name="revisor" value="xingy, 1795768053" />
     <param name="labels" value="" />
     <param name="Preprocessor" value="" />
   </paramlist>
@@ -5851,6 +5851,42 @@
         <param name="active_1" value="true" />
       </paramlist>
     </Settings>
+    <Settings classid="GraphFrameSettings" id="1896295685" link="1523317467">
+      <path>
+        <ref link="1199104945" />
+      </path>
+      <paramlist>
+        <param name="xmin" value="-1" />
+        <param name="xmax" value="1" />
+      </paramlist>
+    </Settings>
+    <Settings classid="OverlayGraphSettings" id="76893936" link="1233278919">
+      <path>
+        <ref link="1199104945" />
+      </path>
+      <paramlist>
+        <param name="ymin" value="-2.000000" />
+        <param name="ymax" value="2.000000" />
+      </paramlist>
+    </Settings>
+    <Settings classid="OverlayGraphSettings" id="1932970398" link="1635962284">
+      <path>
+        <ref link="1199104945" />
+      </path>
+      <paramlist>
+        <param name="ymin" value="-2.000000" />
+        <param name="ymax" value="2.000000" />
+      </paramlist>
+    </Settings>
+    <Settings classid="OverlayGraphSettings" id="1376788510" link="938843707">
+      <path>
+        <ref link="1199104945" />
+      </path>
+      <paramlist>
+        <param name="ymin" value="-2.000000" />
+        <param name="ymax" value="2.000000" />
+      </paramlist>
+    </Settings>
   </List>
   <bookmarks />
   <GlobalSubstitutions name="Default">
@@ -5861,7 +5897,7 @@
     </paramlist>
   </GlobalSubstitutions>
   <definitions>
-    <Definition classid="UserCmpDefn" name="AC_Grid_Eq" build="" crc="100383460" view="false" instances="0" date="1795735945" id="1003122888" w="320" h="400" url="" group="">
+    <Definition classid="UserCmpDefn" name="AC_Grid_Eq" build="" crc="100383460" view="false" instances="0" date="1795756867" id="1003122888" w="320" h="400" url="" group="">
       <paramlist>
         <param name="Description" value="Thevenin equivalent of AC power system" />
       </paramlist>
@@ -6339,7 +6375,7 @@
         </User>
       </schematic>
     </Definition>
-    <Definition classid="UserCmpDefn" name="Reset_PI" build="" crc="69023382" view="false" instances="0" date="1795730722" id="609981536" w="320" h="400" url="" group="">
+    <Definition classid="UserCmpDefn" name="Reset_PI" build="" crc="69023382" view="false" instances="0" date="1795765561" id="609981536" w="320" h="400" url="" group="">
       <paramlist>
         <param name="Description" value="" />
       </paramlist>
@@ -7913,7 +7949,7 @@ Contact: xingyu.zhao.th@dartmouth.edu]]></Sticky>
         </User>
       </schematic>
     </Definition>
-    <Definition classid="UserCmpDefn" name="AFE_Avg_Model" build="" crc="10534369" view="false" instances="0" date="1795730723" id="1613642253" w="320" h="400" url="" group="">
+    <Definition classid="UserCmpDefn" name="AFE_Avg_Model" build="" crc="10534369" view="false" instances="0" date="1795765562" id="1613642253" w="320" h="400" url="" group="">
       <paramlist>
         <param name="Description" value="Average active front end rectifier model" />
       </paramlist>
@@ -11856,7 +11892,7 @@ Contact: xingyu.zhao.th@dartmouth.edu]]></Sticky>
         </Wire>
       </schematic>
     </Definition>
-    <Definition classid="UserCmpDefn" name="VSI_Avg_Model" build="" crc="45385762" view="false" instances="0" date="1795730724" id="26179720" w="320" h="400" url="" group="">
+    <Definition classid="UserCmpDefn" name="VSI_Avg_Model" build="" crc="45385762" view="false" instances="0" date="1795765562" id="26179720" w="320" h="400" url="" group="">
       <paramlist>
         <param name="Description" value="Average voltage source inverter model" />
       </paramlist>
@@ -15449,7 +15485,7 @@ Contact: xingyu.zhao.th@dartmouth.edu]]></Sticky>
         </Wire>
       </schematic>
     </Definition>
-    <Definition classid="UserCmpDefn" name="DCDC_Avg_Model" build="" crc="4959819" view="false" instances="0" date="1795730724" id="1060849277" w="320" h="400" url="" group="">
+    <Definition classid="UserCmpDefn" name="DCDC_Avg_Model" build="" crc="4959819" view="false" instances="0" date="1795765562" id="1060849277" w="320" h="400" url="" group="">
       <paramlist>
         <param name="Description" value="Average Bidirection DC-DC model" />
       </paramlist>
@@ -27643,7 +27679,7 @@ Contact: xingyu.zhao.th@dartmouth.edu]]></Sticky>
         </User>
       </schematic>
     </Definition>
-    <Definition classid="UserCmpDefn" name="PFC_PSU_Avg_Model" build="" crc="127031586" view="false" instances="0" date="1795733710" id="1251182355" w="320" h="400">
+    <Definition classid="UserCmpDefn" name="PFC_PSU_Avg_Model" build="" crc="127031586" view="false" instances="0" date="1795765561" id="1251182355" w="320" h="400">
       <paramlist>
         <param name="Description" value="Average PFC-PSU model" />
       </paramlist>
@@ -31443,7 +31479,7 @@ Contact: xingyu.zhao.th@dartmouth.edu]]></Sticky>
         </Wire>
       </schematic>
     </Definition>
-    <Definition classid="UserCmpDefn" name="Buck_Avg_Model" build="" crc="108537129" view="false" instances="0" date="1795730722" id="550453557" w="320" h="400" url="" group="">
+    <Definition classid="UserCmpDefn" name="Buck_Avg_Model" build="" crc="108537129" view="false" instances="0" date="1795765561" id="550453557" w="320" h="400" url="" group="">
       <paramlist>
         <param name="Description" value="Average Buck DC-DC model" />
       </paramlist>
@@ -32957,7 +32993,7 @@ Contact: xingyu.zhao.th@dartmouth.edu]]></Sticky>
         </Wire>
       </schematic>
     </Definition>
-    <Definition classid="UserCmpDefn" name="Sin_Resistor_Load" build="" crc="125738247" view="false" instances="0" date="1795730723" id="1412842577" w="320" h="400" url="" group="">
+    <Definition classid="UserCmpDefn" name="Sin_Resistor_Load" build="" crc="128777742" view="false" instances="0" date="1795763656" id="1412842577" w="320" h="400" url="" group="">
       <paramlist>
         <param name="Description" value="Sinusoidal resistor load" />
       </paramlist>
@@ -33209,7 +33245,7 @@ Contact: xingyu.zhao.th@dartmouth.edu]]></Sticky>
             <param name="UseSignalName" value="1" />
             <param name="enab" value="1" />
             <param name="Display" value="1" />
-            <param name="Scale" value="1.0" />
+            <param name="Scale" value="900" />
             <param name="Units" value="" />
             <param name="mrun" value="0" />
             <param name="Pol" value="0" />
@@ -50352,7 +50388,7 @@ Contact: xingyu.zhao.th@dartmouth.edu]]></Sticky>
           </paramlist><![CDATA[The fictitious DC source is used to initialize the IM.]]></Sticky>
       </schematic>
     </Definition>
-    <Definition classid="UserCmpDefn" name="Mode_Control" build="" crc="131191012" view="false" instances="0" date="1795730723" id="1071432151" w="320" h="400" url="" group="">
+    <Definition classid="UserCmpDefn" name="Mode_Control" build="" crc="131191012" view="false" instances="0" date="1795765561" id="1071432151" w="320" h="400" url="" group="">
       <paramlist>
         <param name="Description" value="Online: 0; Battery:1;  Bypass:2." />
       </paramlist>
@@ -50889,7 +50925,7 @@ Bypass Mode: 2
         </Wire>
       </schematic>
     </Definition>
-    <Definition classid="UserCmpDefn" name="Voltage_Dip_Generator" build="" crc="82074820" view="false" instances="0" date="1795730722" id="627336527" w="320" h="400" url="" group="">
+    <Definition classid="UserCmpDefn" name="Voltage_Dip_Generator" build="" crc="82074820" view="false" instances="0" date="1795756866" id="627336527" w="320" h="400" url="" group="">
       <paramlist>
         <param name="Description" value="" />
       </paramlist>
@@ -51265,7 +51301,7 @@ Bypass Mode: 2
         </User>
       </schematic>
     </Definition>
-    <Definition classid="UserCmpDefn" name="VRT_Curve" build="" crc="83552023" view="false" instances="0" date="1795727372" id="1239077141" w="320" h="400" url="" group="">
+    <Definition classid="UserCmpDefn" name="VRT_Curve" build="" crc="83552023" view="false" instances="0" date="1795765561" id="1239077141" w="320" h="400" url="" group="">
       <paramlist>
         <param name="Description" value="" />
       </paramlist>
@@ -51997,7 +52033,7 @@ Bypass Mode: 2
   </definitions>
   <List classid="Resource" />
   <hierarchy>
-    <call link="558455562" name="DC_EMT_lib:DS" z="-1" view="false" instance="0">
+    <call link="179467079" name="DC_EMT_lib:DS" z="-1" view="false" instance="0">
       <call link="1199104945" name="DC_EMT_lib:Main" z="-1" view="true" instance="0">
         <call link="1616994272" name="DC_EMT_lib:AFE_Swt_Model" z="-1" view="false" instance="0">
           <call link="1076739943" name="DC_EMT_lib:Reset_PI" z="840" view="false" instance="0" />
@@ -52028,27 +52064,27 @@ Bypass Mode: 2
           <call link="297455178" name="DC_EMT_lib:Reset_PI" z="690" view="false" instance="15" />
           <call link="1188655559" name="DC_EMT_lib:Reset_PI" z="790" view="false" instance="16" />
         </call>
+        <call link="277973679" name="DC_EMT_lib:VSI_Red_Model" z="-1" view="false" instance="0">
+          <call link="479006788" name="DC_EMT_lib:Reset_PI" z="660" view="false" instance="17" />
+          <call link="809402320" name="DC_EMT_lib:Reset_PI" z="760" view="false" instance="18" />
+          <call link="583294192" name="DC_EMT_lib:Reset_PI" z="770" view="false" instance="19" />
+        </call>
         <call link="1326367776" name="DC_EMT_lib:DCDC_Red_Model" z="-1" view="false" instance="0">
-          <call link="852581901" name="DC_EMT_lib:Reset_PI" z="610" view="false" instance="17" />
+          <call link="852581901" name="DC_EMT_lib:Reset_PI" z="610" view="false" instance="20" />
         </call>
         <call link="987043607" name="DC_EMT_lib:PFC_PSU_Red_Model" z="-1" view="false" instance="0">
-          <call link="1396299671" name="DC_EMT_lib:Reset_PI" z="420" view="false" instance="18" />
+          <call link="1396299671" name="DC_EMT_lib:Reset_PI" z="420" view="false" instance="21" />
         </call>
-        <call link="123164985" name="DC_EMT_lib:Reset_PI" z="-1" view="false" instance="19" />
         <call link="2069139198" name="DC_EMT_lib:Buck_Red_Model" z="-1" view="false" instance="0">
-          <call link="682475308" name="DC_EMT_lib:Reset_PI" z="420" view="false" instance="20" />
+          <call link="682475308" name="DC_EMT_lib:Reset_PI" z="420" view="false" instance="22" />
         </call>
-        <call link="277973679" name="DC_EMT_lib:VSI_Red_Model" z="-1" view="false" instance="0">
-          <call link="479006788" name="DC_EMT_lib:Reset_PI" z="660" view="false" instance="21" />
-          <call link="809402320" name="DC_EMT_lib:Reset_PI" z="760" view="false" instance="22" />
-          <call link="583294192" name="DC_EMT_lib:Reset_PI" z="770" view="false" instance="23" />
-        </call>
-        <call link="1588373774" name="DC_EMT_lib:Mode_Control" z="-1" view="false" instance="0" />
+        <call link="1950696290" name="DC_EMT_lib:VFD_Swt_Model" z="-1" view="false" instance="0" />
+        <call link="123164985" name="DC_EMT_lib:Reset_PI" z="-1" view="false" instance="23" />
         <call link="1040649507" name="DC_EMT_lib:VFD_AVM_Model" z="-1" view="false" instance="0" />
         <call link="1248342082" name="DC_EMT_lib:Mechanical_Load" z="-1" view="false" instance="0" />
-        <call link="1950696290" name="DC_EMT_lib:VFD_Swt_Model" z="-1" view="false" instance="0" />
-        <call link="341368106" name="DC_EMT_lib:VRT_Curve" z="-1" view="false" instance="0" />
         <call link="1686357265" name="DC_EMT_lib:Voltage_Dip_Generator" z="-1" view="false" instance="0" />
+        <call link="341368106" name="DC_EMT_lib:VRT_Curve" z="-1" view="false" instance="0" />
+        <call link="1588373774" name="DC_EMT_lib:Mode_Control" z="-1" view="false" instance="0" />
         <call link="124462788" name="DC_EMT_lib:PFC_PSU_Avg_Model" z="50" view="false" instance="0">
           <call link="1672973809" name="DC_EMT_lib:Reset_PI" z="590" view="false" instance="24" />
           <call link="1550816995" name="DC_EMT_lib:Reset_PI" z="660" view="false" instance="25" />
